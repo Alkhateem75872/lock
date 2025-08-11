@@ -1,6 +1,6 @@
 package dev.muhammad.applock.features.settings.ui
 
-//import android.app.admin.DevicePolicyManager
+import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -63,9 +63,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-//import dev.muhammad.applock.core.broadcast.DeviceAdmin
+import dev.muhammad.applock.core.broadcast.DeviceAdmin
 import dev.muhammad.applock.core.navigation.Screen
-//import dev.muhammad.applock.core.utils.hasUsagePermission
+import dev.muhammad.applock.core.utils.hasUsagePermission
 import dev.muhammad.applock.core.utils.isAccessibilityServiceEnabled
 import dev.muhammad.applock.core.utils.openAccessibilitySettings
 import dev.muhammad.applock.data.repository.AppLockRepository
@@ -88,11 +88,11 @@ fun SettingsScreen(
     val context = LocalContext.current
     val appLockRepository = remember { AppLockRepository(context) }
     var showDialog by remember { mutableStateOf(false) }
-/*    var showUnlockTimeDialog by remember { mutableStateOf(false) }
+    var showUnlockTimeDialog by remember { mutableStateOf(false) }
 
     var useMaxBrightness by remember {
         mutableStateOf(appLockRepository.shouldUseMaxBrightness())
-    }*/
+    }
     var useBiometricAuth by remember {
         mutableStateOf(appLockRepository.isBiometricAuthEnabled())
     }
@@ -106,11 +106,11 @@ fun SettingsScreen(
     var antiUninstallEnabled by remember {
         mutableStateOf(appLockRepository.isAntiUninstallEnabled())
     }
-/*    var disableHapticFeedback by remember {
+    var disableHapticFeedback by remember {
         mutableStateOf(appLockRepository.shouldDisableHaptics())
-    }*/
+    }
     var showPermissionDialog by remember { mutableStateOf(false) }
-//    var showDeviceAdminDialog by remember { mutableStateOf(false) }
+    var showDeviceAdminDialog by remember { mutableStateOf(false) }
     var showAccessibilityDialog by remember { mutableStateOf(false) }
 
     val biometricManager = BiometricManager.from(context)
@@ -118,7 +118,7 @@ fun SettingsScreen(
         biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS
     }
 
-/*    if (showUnlockTimeDialog) {
+    if (showUnlockTimeDialog) {
         UnlockTimeDurationDialog(
             currentDuration = unlockTimeDuration,
             onDismiss = { showUnlockTimeDialog = false },
@@ -128,7 +128,7 @@ fun SettingsScreen(
                 showUnlockTimeDialog = false
             }
         )
-    }*/
+    }
 
     if (showPermissionDialog) {
         PermissionRequiredDialog(
@@ -140,7 +140,7 @@ fun SettingsScreen(
         )
     }
 
-/*    if (showDeviceAdminDialog) {
+    if (showDeviceAdminDialog) {
         DeviceAdminDialog(
             onDismiss = { showDeviceAdminDialog = false },
             onConfirm = {
@@ -156,7 +156,7 @@ fun SettingsScreen(
                 context.startActivity(intent)
             }
         )
-    }*/
+    }
 
     if (showAccessibilityDialog) {
         AccessibilityDialog(
@@ -165,12 +165,13 @@ fun SettingsScreen(
                 showAccessibilityDialog = false
                 openAccessibilitySettings(context)
 
-/*                val dpm =
+                // Check if device admin is still needed after accessibility is granted
+                val dpm =
                     context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
                 val component = ComponentName(context, DeviceAdmin::class.java)
                 if (!dpm.isAdminActive(component)) {
                     showDeviceAdminDialog = true
-                }*/
+                }
             }
         )
     }
@@ -233,6 +234,114 @@ fun SettingsScreen(
                                 appLockRepository.setPromptForBiometricAuth(isChecked)
                             }
                         )
+                    }
+                }
+            }
+            item {
+                Text(
+                    text = "Security",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+                ElevatedCard(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Column {
+                        ActionSettingItem(
+                            icon = Icons.Default.Lock,
+                            title = "Change PIN",
+                            description = "Change your PIN",
+                            onClick = {
+                                navController.navigate(Screen.ChangePassword.route)
+                            }
+                        )
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+
+                        ActionSettingItem(
+                            icon = Timer,
+                            title = "Unlock Duration",
+                            description = if (unlockTimeDuration > 0) "Apps remain unlocked for $unlockTimeDuration minutes" else "Apps lock after exit",
+                            onClick = { showUnlockTimeDialog = true }
+                        )
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+
+                        SettingItem(
+                            icon = Icons.Default.Lock,
+                            title = "Stay With Me",
+                            description = "Prevents removal of App Lock",
+                            checked = antiUninstallEnabled,
+                            onCheckedChange = { isChecked ->
+                                if (isChecked) {
+                                    val dpm =
+                                        context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+                                    val component = ComponentName(context, DeviceAdmin::class.java)
+                                    val hasDeviceAdmin = dpm.isAdminActive(component)
+                                    val hasAccessibility = context.isAccessibilityServiceEnabled()
+
+                                    when {
+                                        !hasDeviceAdmin && !hasAccessibility -> {
+                                            showPermissionDialog = true
+                                        }
+
+                                        !hasDeviceAdmin -> {
+                                            showDeviceAdminDialog = true
+                                        }
+
+                                        !hasAccessibility -> {
+                                            showAccessibilityDialog = true
+                                        }
+
+                                        else -> {
+                                            antiUninstallEnabled = true
+                                            appLockRepository.setAntiUninstallEnabled(true)
+                                        }
+                                    }
+                                } else {
+                                    antiUninstallEnabled = false
+                                    appLockRepository.setAntiUninstallEnabled(false)
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+            item {
+                Text(
+                    text = "About",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(top = 0.dp, bottom = 12.dp)
+                )
+                ElevatedCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Column {
+                        ActionSettingItem(icon = Github, title = "View Source Code", onClick = {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    "https://github.com/mohamedkam000/applock".toUri()
+                                )
+                            )
+                        })
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                        ActionSettingItem(
+                            icon = Icons.Filled.Person,
+                            title = "Developer Profile",
+                            onClick = {
+                                context.startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        "https://github.com/mohamedkam000".toUri()
+                                    )
+                                )
+                            })
                     }
                 }
             }
@@ -332,7 +441,7 @@ fun ActionSettingItem(
     }
 }
 
-/*@Composable
+@Composable
 fun UnlockTimeDurationDialog(
     currentDuration: Int,
     onDismiss: () -> Unit,
@@ -341,6 +450,7 @@ fun UnlockTimeDurationDialog(
     val durations = listOf(0, 1, 5, 15, 30, 60)
     var selectedDuration by remember { mutableIntStateOf(currentDuration) }
 
+    // If the current duration is not in our list, default to the closest value
     if (!durations.contains(selectedDuration)) {
         selectedDuration = durations.minByOrNull { abs(it - currentDuration) } ?: 0
     }
@@ -388,7 +498,7 @@ fun UnlockTimeDurationDialog(
             }
         }
     )
-}*/
+}
 
 @Composable
 fun PermissionRequiredDialog(
@@ -406,6 +516,32 @@ fun PermissionRequiredDialog(
         confirmButton = {
             TextButton(onClick = onConfirm) {
                 Text("Grant Permission")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+fun DeviceAdminDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Device Admin") },
+        text = {
+            Text(
+                "App Lock needs Device Admin permission to prevent uninstallation."
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text("Enable")
             }
         },
         dismissButton = {

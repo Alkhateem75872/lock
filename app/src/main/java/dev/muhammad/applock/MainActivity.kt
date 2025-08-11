@@ -14,7 +14,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.compose.rememberNavController
 import dev.muhammad.applock.core.navigation.AppNavHost
 import dev.muhammad.applock.core.navigation.Screen
-//import dev.muhammad.applock.features.appintro.domain.AppIntroManager
 import dev.muhammad.applock.ui.theme.AppLockTheme
 
 class MainActivity : FragmentActivity() {
@@ -37,10 +36,6 @@ class MainActivity : FragmentActivity() {
                     AppNavHost(navController = navController, startDestination = startDestination)
 
                     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-                        if (navController.currentDestination?.route == Screen.AppIntro.route || navController.currentDestination?.route == Screen.SetPassword.route) {
-                            // If we are on the App Intro screen, we don't need to check for accessibility service
-                            return@LifecycleEventEffect
-                        }
                         if (navController.currentDestination?.route != Screen.PasswordOverlay.route) {
                             navController.navigate(Screen.PasswordOverlay.route)
                         }
@@ -51,10 +46,6 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun determineStartDestination(): String {
-        // Check if we should show the app intro
-/*        if (AppIntroManager.shouldShowIntro(this)) {
-            return Screen.AppIntro.route
-        }*/
 
         // Check if password is set, if not, redirect to SetPasswordActivity
         val sharedPrefs = getSharedPreferences("app_lock_prefs", MODE_PRIVATE)

@@ -364,11 +364,6 @@ fun SetPasswordScreen(
                                                 popUpTo(Screen.SetPassword.route) {
                                                     inclusive = true
                                                 }
-/*                                                if (isFirstTimeSetup) {
-                                                    popUpTo(Screen.AppIntro.route) {
-                                                        inclusive = true
-                                                    }*/
-                                                }
                                             }
                                         } else {
                                             showMismatchError = true
