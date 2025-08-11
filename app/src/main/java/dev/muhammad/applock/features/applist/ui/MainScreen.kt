@@ -229,12 +229,12 @@ fun MainScreen(
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
+        modifier = Modifier.fillMaxSize()
+/*        topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        "App Lock",
+                        "Locker",
                         style = MaterialTheme.typography.titleLarge,
                     )
                 },
@@ -253,7 +253,7 @@ fun MainScreen(
                     }
                 },
             )
-        }
+        }*/
     ) { innerPadding ->
         Column(
             modifier = Modifier
