@@ -14,7 +14,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.compose.rememberNavController
 import dev.muhammad.applock.core.navigation.AppNavHost
 import dev.muhammad.applock.core.navigation.Screen
-import dev.muhammad.applock.features.appintro.domain.AppIntroManager
+//import dev.muhammad.applock.features.appintro.domain.AppIntroManager
 import dev.muhammad.applock.ui.theme.AppLockTheme
 
 class MainActivity : FragmentActivity() {
@@ -52,9 +52,9 @@ class MainActivity : FragmentActivity() {
 
     private fun determineStartDestination(): String {
         // Check if we should show the app intro
-        if (AppIntroManager.shouldShowIntro(this)) {
+/*        if (AppIntroManager.shouldShowIntro(this)) {
             return Screen.AppIntro.route
-        }
+        }*/
 
         // Check if password is set, if not, redirect to SetPasswordActivity
         val sharedPrefs = getSharedPreferences("app_lock_prefs", MODE_PRIVATE)

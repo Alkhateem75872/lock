@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Build
 import dev.muhammad.applock.data.repository.AppLockRepository
 import org.lsposed.hiddenapibypass.HiddenApiBypass
-import rikka.sui.Sui
+//import rikka.sui.Sui
 
 class AppLockApplication : Application() {
     lateinit var appLockRepository: AppLockRepository
@@ -20,6 +20,6 @@ class AppLockApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         appLockRepository = AppLockRepository(this)
-        Sui.init(packageName)
+//        Sui.init(packageName)
     }
 }

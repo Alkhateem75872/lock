@@ -15,7 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import dev.muhammad.applock.AppLockApplication
-import dev.muhammad.applock.features.appintro.ui.AppIntroScreen
+//import dev.muhammad.applock.features.appintro.ui.AppIntroScreen
 import dev.muhammad.applock.features.applist.ui.MainScreen
 import dev.muhammad.applock.features.lockscreen.ui.PasswordOverlayScreen
 import dev.muhammad.applock.features.setpassword.ui.SetPasswordScreen
@@ -39,7 +39,7 @@ fun AppNavHost(navController: NavHostController, startDestination: String) {
                     scaleIn(initialScale = 0.9f, animationSpec = tween(duration))
         },
     ) {
-        composable(Screen.AppIntro.route) { AppIntroScreen(navController) }
+//        composable(Screen.AppIntro.route) { AppIntroScreen(navController) }
 
         composable(Screen.SetPassword.route) { SetPasswordScreen(navController, true) }
 
