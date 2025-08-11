@@ -4,21 +4,21 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("dev.rikka.tools.refine") version "4.4.0"
+//    id("dev.rikka.tools.refine") version "4.4.0"
 }
 
 android {
     namespace = "dev.muhammad.applock"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "dev.muhammad.applock"
         minSdk = 26
-        targetSdk = 36
-        versionCode = 3
+        targetSdk = 34
+        versionCode = 100
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -33,12 +33,12 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+//            isMinifyEnabled = true
+//            isShrinkResources = true
+//            proguardFiles(
+//                getDefaultProguardFile("proguard-android-optimize.txt"),
+//                "proguard-rules.pro"
+//            )
             signingConfig = signingConfigs.getByName("release")
         }
     }
