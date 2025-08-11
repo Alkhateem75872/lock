@@ -1,6 +1,6 @@
 package dev.muhammad.applock.features.settings.ui
 
-//import android.app.admin.DevicePolicyManager
+import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -103,14 +103,14 @@ fun SettingsScreen(
         mutableIntStateOf(appLockRepository.getUnlockTimeDuration())
     }
 
-//    var antiUninstallEnabled by remember {
+    var antiUninstallEnabled by remember {
         mutableStateOf(appLockRepository.isAntiUninstallEnabled())
     }
     var disableHapticFeedback by remember {
         mutableStateOf(appLockRepository.shouldDisableHaptics())
     }
     var showPermissionDialog by remember { mutableStateOf(false) }
-//    var showDeviceAdminDialog by remember { mutableStateOf(false) }
+    var showDeviceAdminDialog by remember { mutableStateOf(false) }
     var showAccessibilityDialog by remember { mutableStateOf(false) }
 
     val biometricManager = BiometricManager.from(context)
@@ -140,7 +140,7 @@ fun SettingsScreen(
         )
     }
 
-/*    if (showDeviceAdminDialog) {
+    if (showDeviceAdminDialog) {
         DeviceAdminDialog(
             onDismiss = { showDeviceAdminDialog = false },
             onConfirm = {
@@ -156,7 +156,7 @@ fun SettingsScreen(
                 context.startActivity(intent)
             }
         )
-    }*/
+    }
 
     if (showAccessibilityDialog) {
         AccessibilityDialog(
@@ -260,7 +260,7 @@ fun SettingsScreen(
                             }
                         )
                         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
-/*
+
                         ActionSettingItem(
                             icon = Timer,
                             title = "Unlock Duration",
@@ -305,11 +305,11 @@ fun SettingsScreen(
                                     appLockRepository.setAntiUninstallEnabled(false)
                                 }
                             }
-                        )*/
+                        )
                     }
                 }
             }
-/*            item {
+            item {
                 Text(
                     text = "About",
                     style = MaterialTheme.typography.titleMedium,
@@ -344,7 +344,7 @@ fun SettingsScreen(
                             })
                     }
                 }
-            }*/
+            }
         }
     }
 }
