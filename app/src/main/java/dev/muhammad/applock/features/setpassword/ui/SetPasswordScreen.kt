@@ -364,10 +364,10 @@ fun SetPasswordScreen(
                                                 popUpTo(Screen.SetPassword.route) {
                                                     inclusive = true
                                                 }
-                                                if (isFirstTimeSetup) {
+/*                                                if (isFirstTimeSetup) {
                                                     popUpTo(Screen.AppIntro.route) {
                                                         inclusive = true
-                                                    }
+                                                    }*/
                                                 }
                                             }
                                         } else {

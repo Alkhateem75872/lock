@@ -68,9 +68,9 @@ import dev.muhammad.applock.core.utils.openAccessibilitySettings
 import dev.muhammad.applock.data.repository.BackendImplementation
 import dev.muhammad.applock.ui.components.AccessibilityServiceGuideDialog
 import dev.muhammad.applock.ui.components.AntiUninstallAccessibilityPermissionDialog
-import dev.muhammad.applock.ui.components.ShizukuPermissionDialog
-import dev.muhammad.applock.ui.components.UsageStatsPermission
-import rikka.shizuku.Shizuku
+//import dev.muhammad.applock.ui.components.ShizukuPermissionDialog
+//import dev.muhammad.applock.ui.components.UsageStatsPermission
+//import rikka.shizuku.Shizuku
 
 @OptIn(
     ExperimentalMaterial3ExpressiveApi::class,
@@ -90,17 +90,17 @@ fun MainScreen(
 
     // Check if accessibility service is enabled
     var showAccessibilityDialog by remember { mutableStateOf(false) }
-    var showShizukuDialog by remember { mutableStateOf(false) }
-    var showUsageStatsDialog by remember { mutableStateOf(false) }
+/*    var showShizukuDialog by remember { mutableStateOf(false) }
+    var showUsageStatsDialog by remember { mutableStateOf(false) }*/
     var showAntiUninstallAccessibilityDialog by remember { mutableStateOf(false) }
-    var showAntiUninstallDeviceAdminDialog by remember { mutableStateOf(false) }
+//    var showAntiUninstallDeviceAdminDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         val appLockRepository = context.appLockRepository()
 
         val selectedBackend = appLockRepository.getBackendImplementation()
 
-        val dpm =
+/*        val dpm =
             context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
         val component = ComponentName(context, DeviceAdmin::class.java)
 
@@ -111,7 +111,7 @@ fun MainScreen(
             } else if (!dpm.isAdminActive(component)) {
                 showAntiUninstallDeviceAdminDialog = true
             }
-        }
+        }*/
 
         when (selectedBackend) {
             BackendImplementation.ACCESSIBILITY -> {
@@ -120,7 +120,7 @@ fun MainScreen(
                 }
             }
 
-            BackendImplementation.USAGE_STATS -> {
+/*            BackendImplementation.USAGE_STATS -> {
                 if (!context.hasUsagePermission()) {
                     showUsageStatsDialog = true
                 }
@@ -138,7 +138,7 @@ fun MainScreen(
                         Toast.LENGTH_LONG
                     ).show()
                 }
-            }
+            }*/
         }
     }
 
@@ -155,48 +155,7 @@ fun MainScreen(
         )
     }
 
-    if (showShizukuDialog && !showAntiUninstallAccessibilityDialog && !showAntiUninstallDeviceAdminDialog && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_DENIED) {
-        ShizukuPermissionDialog(
-            onOpenSettings = {
-                try {
-                    if (Shizuku.isPreV11() || Shizuku.getVersion() < 11) {
-                        Toast.makeText(
-                            context,
-                            "Grant Shizuku permission manually",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        showShizukuDialog = false
-
-                        Shizuku.requestPermission(423)
-                    }
-                } catch (_: Exception) {
-                    Toast.makeText(
-                        context,
-                        "Shizuku is not available.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            },
-            onDismiss = {
-                showShizukuDialog = false
-            }
-        )
-    }
-
-    if (showUsageStatsDialog && !showAntiUninstallAccessibilityDialog && !showAntiUninstallDeviceAdminDialog && !context.hasUsagePermission()) {
-        UsageStatsPermission(
-            onOpenSettings = {
-                context.startActivity(Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS))
-                showUsageStatsDialog = false
-            },
-            onDismiss = {
-                showUsageStatsDialog = false
-            }
-        )
-    }
-
-    if (showAntiUninstallAccessibilityDialog) {
+/*    if (showAntiUninstallAccessibilityDialog) {
         AntiUninstallAccessibilityPermissionDialog(
             onOpenSettings = {
                 openAccessibilitySettings(context)
@@ -226,7 +185,7 @@ fun MainScreen(
                 showAntiUninstallDeviceAdminDialog = false
             }
         )
-    }
+    }*/
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
