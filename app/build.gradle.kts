@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "dev.muhammad.applock"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "dev.muhammad.applock"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 100
         versionName = "1.0"
 
