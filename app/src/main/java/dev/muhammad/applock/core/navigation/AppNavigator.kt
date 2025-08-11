@@ -48,7 +48,7 @@ fun AppNavHost(navController: NavHostController, startDestination: String) {
             val context = LocalActivity.current as FragmentActivity
 
             PasswordOverlayScreen(
-                showBiometricButton = application.appLockRepository.isBiometricAuthEnabled(),
+                showBiometricButton = true,
                 fromMainActivity = true,
                 onBiometricAuth = {
                     val executor = ContextCompat.getMainExecutor(context)
@@ -106,7 +106,5 @@ fun AppNavHost(navController: NavHostController, startDestination: String) {
                 }
             )
         }
-        composable(Screen.Settings.route) { SettingsScreen(navController) }
     }
 }
-

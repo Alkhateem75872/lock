@@ -168,7 +168,7 @@ class PasswordOverlayActivity : FragmentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     PasswordOverlayScreen(
                         modifier = Modifier.padding(innerPadding),
-                        showBiometricButton = appLockRepository.isBiometricAuthEnabled(),
+                        showBiometricButton = true,
                         fromMainActivity = false,
                         onBiometricAuth = { triggerBiometricPromptIfNeeded() },
                         onAuthSuccess = {},
@@ -406,7 +406,7 @@ fun PasswordIndicators(
             ) { state ->
                 val shape = when (state) {
                     "filled" -> shapes[index % shapes.size].toShape()
-                    "next" -> MaterialShapes.Diamond.toShape()
+                    "next" -> MaterialShapes.Circle.toShape()
                     else -> MaterialShapes.Circle.toShape()
                 }
                 val color = when (state) {
