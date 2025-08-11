@@ -149,7 +149,7 @@ class ShizukuAppLockService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("AppLock")
             .setContentText("Protecting your apps with Shizuku")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_launcher)
             .build()
     }
 
